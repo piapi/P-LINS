@@ -1,0 +1,85 @@
+pplio:
+
+  # Topics
+  pointCloudTopic: "/livox/lidar"               # Point cloud data
+  imuTopic: "/livox/imu"                         # IMU data
+  odomTopic: "odometry/imu"                   # IMU pre-preintegration odometry, same frequency as IMU
+  gpsTopic: "/gps/"                   # GPS odometry topic from navsat, see module_navsat.launch file
+
+  # Frames
+  lidarFrame: "base_link"
+  baselinkFrame: "base_link"
+  odometryFrame: "odom"
+  mapFrame: "map"
+
+
+  
+  # Export settings
+  savePCD: false                              # https://github.com/TixiaoShan/LIO-SAM/issues/3
+  savePCDDirectory: "/home/liao/pplio/src/pplio/SavePCD/"        # in your home folder, starts and ends with "/". Warning: the code deletes "LOAM" folder then recreates it. See "mapOptimization" for implementation
+
+
+  # Sensor Settings
+  livoxCustomPoint: 1                        # lidar lidar_type is livox and the type is livox_ros_driver/CustomMsg ,set to 1
+  lidar_type: livox                            # lidar lidar_type type, 'velodyne' or 'ouster' or 'livox'
+  N_SCAN: 6                                  # number of lidar channel (i.e., Velodyne/Ouster: 16, 32, 64, 128, Livox Horizon: 6)
+  Horizon_SCAN: 4000                          # lidar horizontal resolution (Velodyne:1800, Ouster:512,1024,2048, Livox Horizon: 4000)
+  downsampleRate: 1                           # default: 1. Downsample your data if too many points. i.e., 16 = 64 / 4, 16 = 16 / 1
+  lidarMinRange: 0.0                          # default: 1.0, minimum lidar range to be used
+  lidarMaxRange: 1000.0                       # default: 1000.0, maximum lidar range to be used
+
+  # IMU Settings
+  imu_type: 0 # 0 6轴imu 1 九轴imu
+  imu_frequency: 200 #imu的采样率
+  imu_acc_noise: [0.023938,  0.0155746, 0.00574284]
+  imu_gyro_noise: [0.000137155, 0.000360945 , 0.00019978]
+  imu_ba: [0.000456026, -0.000115031,   -0.0479015]
+  imu_bg: [0.000197615,  0.00148389 , 0.00175864]
+  imu_gravity: [0.0933875, -0.0235566,   -9.80953]
+  use_imu_init: false
+  # PDR Setting
+  step_max: 0.3  #0.5
+  step_min: -0.3
+  zero_max: 0.00   #0.3
+  zero_min: -0.00
+
+  # Extrinsics: T_lb (lidar -> imu)
+  extrinsicTrans: [0.0, 0.0, 0.0]
+
+  extrinsicRot: [1, 0, 0,
+                  0, 1, 0,
+                  0, 0, 1]
+  extrinsicRPY: [1, 0, 0,
+                  0, 1, 0,
+                  0, 0, 1]
+
+  # LOAM feature threshold
+  edgeThreshold: 1.0
+  surfThreshold: 0.1
+  edgeFeatureMinValidNum: 10
+  surfFeatureMinValidNum: 40
+
+  # voxel filter paprams
+  odometrySurfLeafSize: 0.4                     # default: 0.4 - outdoor, 0.2 - indoor
+  edge_leaf_size: 0.1                    # default: 0.2 - outdoor, 0.1 - indoor
+  surf_leaf_size: 0.1                      # default: 0.4 - outdoor, 0.2 - indoor
+
+
+
+  # CPU Params
+  numberOfCores: 4                              # number of cores for mapping optimization
+  mappingProcessInterval: 0.15                  # seconds, regulate mapping frequency
+
+  # Surrounding map
+  surroundingkeyframeAddingDistThreshold: 1.0   # meters, regulate keyframe adding threshold
+  surroundingkeyframeAddingAngleThreshold: 0.2  # radians, regulate keyframe adding threshold
+  surroundingKeyframeDensity: 0.1               # meters, downsample surrounding keyframe poses   
+  surroundingKeyframeSearchRadius: 50        # meters, within n meters scan-to-map optimization (when loop closure disabled)
+
+
+
+  # Visualization
+  globalMapVisualizationSearchRadius: 1000.0    # meters, global map visualization radius
+  globalMapVisualizationPoseDensity: 10.0       # meters, global map visualization keyframe density
+  globalMapVisualizationLeafSize: 1.0           # meters, global map visualization cloud density
+

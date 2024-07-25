@@ -1,0 +1,91 @@
+pplio:
+
+  # Topics
+  pointCloudTopic: "/livox/lidar"               # Point cloud data
+  imuTopic: "/alphasense/imu"                         # IMU data
+  odomTopic: "odometry/imu"                   # IMU pre-preintegration odometry, same frequency as IMU
+  gpsTopic: "/gps/"                   # GPS odometry topic from navsat, see module_navsat.launch file
+
+  # Frames
+  lidarFrame: "base_link"
+  baselinkFrame: "base_link"
+  odometryFrame: "odom"
+  mapFrame: "map"
+
+  # GPS Settings
+  useGPS: false
+  debugGps: false
+  useImuHeadingInitialization: false           # if using GPS data, set to "true"
+  useGpsElevation: false                      # if GPS elevation is bad, set to "false"
+  gpsCovThreshold: 2.0                        # m^2, threshold for using GPS data
+  poseCovThreshold: 25.0                      # m^2, threshold for using GPS data
+  
+  # Export settings
+  savePCD: false                              # https://github.com/TixiaoShan/LIO-SAM/issues/3
+  savePCDDirectory: "/home/liao/pplio/src/pplio/SavePCD/"        # in your home folder, starts and ends with "/". Warning: the code deletes "LOAM" folder then recreates it. See "mapOptimization" for implementation
+
+
+  # Sensor Settings
+  livoxCustomPoint: 1                        # lidar lidar_type is livox and the type is livox_ros_driver/CustomMsg ,set to 1
+  lidar_type: livox                            # lidar lidar_type type, 'velodyne' or 'ouster' or 'livox'
+  N_SCAN: 6                                  # number of lidar channel (i.e., Velodyne/Ouster: 16, 32, 64, 128, Livox Horizon: 6)
+  Horizon_SCAN: 4000                          # lidar horizontal resolution (Velodyne:1800, Ouster:512,1024,2048, Livox Horizon: 4000)
+  downsampleRate: 1                           # default: 1. Downsample your data if too many points. i.e., 16 = 64 / 4, 16 = 16 / 1
+  lidarMinRange: 0.5                           # default: 1.0, minimum lidar range to be used
+  lidarMaxRange: 64.0                       # default: 1000.0, maximum lidar range to be used
+
+  # IMU Settings
+  imu_type: 0 # 0 6轴imu 1 九轴imu
+  imu_frequency: 400 #imu的采样率
+  imu_acc_noise: [0.0132768,  0.0172158, 0.00135623]
+  imu_gyro_noise: [0.000137155, 0.000360945 , 0.00019978]
+  imu_ba: [0.00287239, 0.00163838, -0.0689984]
+  imu_bg: [0.000790364,  0.000984923, -0.000742888]
+  imu_gravity: [0.40792, 0.232673, -9.79875]
+  use_imu_init: true
+  # PDR Setting
+  step_max: 0.5
+  step_min: -0.5
+  zero_max: 0.3
+  zero_min: -0.3
+
+  # Extrinsics: T_lb (lidar -> imu)
+  extrinsicTrans: [-0.003050707070885951, -0.021993853931529066, 0.15076415229379997]
+
+  extrinsicRot: [ 0.99983,   0.0170232, -0.00707929 , 
+                  0.0171417,   -0.999708,   0.0170198,
+                  -0.00678749,  -0.0171382,    -0.99983]
+  extrinsicRPY: [1, 0, 0,
+                  0, 1, 0,
+                  0, 0, 1]
+
+  # LOAM feature threshold
+  edgeThreshold: 1.0
+  surfThreshold: 0.1
+  edgeFeatureMinValidNum: 10
+  surfFeatureMinValidNum: 40
+
+  # voxel filter paprams
+  odometrySurfLeafSize: 0.4                     # default: 0.4 - outdoor, 0.2 - indoor
+  edge_leaf_size: 0.2                    # default: 0.2 - outdoor, 0.1 - indoor
+  surf_leaf_size: 0.4                      # default: 0.4 - outdoor, 0.2 - indoor
+
+
+
+  # CPU Params
+  numberOfCores: 4                              # number of cores for mapping optimization
+  mappingProcessInterval: 0.15                  # seconds, regulate mapping frequency
+
+  # Surrounding map
+  surroundingkeyframeAddingDistThreshold: 1.0   # meters, regulate keyframe adding threshold
+  surroundingkeyframeAddingAngleThreshold: 0.2  # radians, regulate keyframe adding threshold
+  surroundingKeyframeDensity: 2.0               # meters, downsample surrounding keyframe poses   
+  surroundingKeyframeSearchRadius: 40        # meters, within n meters scan-to-map optimization (when loop closure disabled)
+
+
+
+  # Visualization
+  globalMapVisualizationSearchRadius: 1000.0    # meters, global map visualization radius
+  globalMapVisualizationPoseDensity: 10.0       # meters, global map visualization keyframe density
+  globalMapVisualizationLeafSize: 1.0           # meters, global map visualization cloud density
+

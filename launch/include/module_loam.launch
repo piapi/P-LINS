@@ -1,0 +1,10 @@
+<launch>
+
+    <arg name="project" default="pplio"/>
+    
+    <!-- <node pkg="$(arg project)" type="$(arg project)_imuPreintegration"   name="$(arg project)_imuPreintegration"    output="screen" 	respawn="true"/> -->
+    <!-- <node pkg="$(arg project)" type="$(arg project)_imageProjection"     name="$(arg project)_imageProjection"      output="screen"     respawn="true"/>
+    <node pkg="$(arg project)" type="$(arg project)_featureExtraction"   name="$(arg project)_featureExtraction"    output="screen"     respawn="true"/> -->
+    <node pkg="$(arg project)" type="$(arg project)_eskfLIO"             name="$(arg project)_eskfLIO"              output="screen"     respawn="true"/>
+    <node pkg="$(arg project)" type="$(arg project)_gpsOdometry"         name="$(arg project)_gpsOdometry"          output="screen"     respawn="true"/>
+</launch>
